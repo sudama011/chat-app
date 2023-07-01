@@ -1,10 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const { chats } = require("./data/data");
+const connectDB = require("./config/db");
 
 dotenv.config();
 const app = express();
-
-const { chats } = require("./data/data");
+connectDB();
 
 app.get("/", (req, res) => {
   res.send("api setup done");
@@ -15,7 +16,7 @@ app.get("/api/chat", (req, res) => {
 });
 
 app.get("/api/chat/:id", (req, res) => {
-  const singleChat = chats.find(chat => chat._id === req.params.id);
+  const singleChat = chats.find((chat) => chat._id === req.params.id);
   res.send(singleChat);
 });
 
