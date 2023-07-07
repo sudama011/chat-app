@@ -1,5 +1,4 @@
 import { Avatar, Box, Text } from "@chakra-ui/react";
-import { color } from "framer-motion";
 import React from "react";
 
 const UserListItem = ({ user, handleFunction }) => {
