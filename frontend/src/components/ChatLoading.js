@@ -1,8 +1,6 @@
 import {
   Stack,
   Skeleton,
-  SkeletonCircle,
-  SkeletonText,
 } from "@chakra-ui/react";
 
 const ChatLoading = () => {

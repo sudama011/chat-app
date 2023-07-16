@@ -1,0 +1,15 @@
+.messages{
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.messages::-webkit-scrollbar {
+    display: none;
+}
+.messages {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
