@@ -16,13 +16,28 @@ import ScrollableChat from "../components/ScrollableChat";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import axios from "axios";
 import "./miscellaneous/styles.css";
+import { io } from "socket.io-client";
+import { set } from "mongoose";
+
+const ENTPOINT = "http://localhost:5000";
+var socket, selectedChatCompare;
+
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [newMessage, setNewMessage] = useState();
+  const [newMessage, setNewMessage] = useState('');
+  const [socketConnected, setSocketConnected] = useState(false);
 
   const toast = useToast();
+  useEffect(() => {
+    socket = io(ENTPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => {
+      setSocketConnected(true);
+    });
+  }, []);
+
   const fetchMessages = async () => {
     if (!selectedChat) return;
     setLoading(true);
@@ -38,6 +53,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         config
       );
       setMessages(data);
+      socket.emit("join chat", selectedChat._id);
     } catch (err) {
       toast({
         title: "Error Occured!",
@@ -53,7 +69,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   useEffect(() => {
     fetchMessages();
+    selectedChatCompare = selectedChat;
   }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
 
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
@@ -64,15 +93,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             Authorization: "Bearer " + user.token,
           },
         };
-        
+
         setNewMessage("");
         const { data } = await axios.post(
           "/api/message",
           { content: newMessage, chatId: selectedChat._id },
           config
         );
-        console.log(data);
-
+        socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (err) {
         toast({
