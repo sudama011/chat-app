@@ -1,6 +1,7 @@
 const express = require("express");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 const dotenv = require("dotenv");
-const { chats } = require("./data/data");
 const connectDB = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
@@ -9,9 +10,10 @@ const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 dotenv.config();
-const app = express();
 connectDB();
 
+const PORT = process.env.PORT || 5000;
+const app = express();
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -25,10 +27,8 @@ app.use("/api/message", messageRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, console.log("listening on port: " + PORT));
-
-const io = require("socket.io")(server, {
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
   pingTimeout: 60000,
   cors: {
     origin: "http://localhost:3000",
@@ -47,6 +47,9 @@ io.on("connection", (socket) => {
     socket.join(room);
   });
 
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
   socket.on("new message", (newMessageRecieved) => {
     var chat = newMessageRecieved.chat;
     if (!chat.users) return console.log("Chat.users not defined");
@@ -56,4 +59,9 @@ io.on("connection", (socket) => {
       socket.in(user._id).emit("message recieved", newMessageRecieved);
     });
   });
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
 });
+
+httpServer.listen(PORT, console.log("listening on port: " + PORT));
