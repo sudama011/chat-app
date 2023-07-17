@@ -23,7 +23,8 @@ const ENTPOINT = "http://localhost:5000";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-  const { user, selectedChat, setSelectedChat } = ChatState();
+  const { user, selectedChat, setSelectedChat, notification, setNotification } =
+    ChatState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -89,6 +90,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
+        // give notification
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
+          setFetchAgain(!fetchAgain);
+        }
       } else {
         setMessages([...messages, newMessageRecieved]);
       }
@@ -202,14 +208,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         )}
         <FormControl onKeyDown={sendMessage} isRequired mt={3}>
           {isTyping && (
-            <div>
+            
               <Lottie
                 options={defaultOptions}
                 width={100}
                 height={30}
                 style={{ marginLeft: 10 }}
               />
-            </div>
+           
           )}
 
           <Input
