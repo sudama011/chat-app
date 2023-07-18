@@ -115,7 +115,6 @@ const SideDrawer = () => {
       setLoadingChat(false);
     }
   };
-  console.log(notification);
 
   return (
     <>

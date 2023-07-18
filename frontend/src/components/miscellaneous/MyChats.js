@@ -7,10 +7,10 @@ import ChatLoading from "../../components/ChatLoading";
 import { getSender } from "../../config/ChatLogics";
 import GroupChatModal from "./GroupChatModal";
 
-const MyChats = ({fetchAgain}) => {
+const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
   const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
-
+  console.log(chats);
   const toast = useToast();
 
   const fetchChats = async () => {
@@ -99,11 +99,18 @@ const MyChats = ({fetchAgain}) => {
                 borderRadius="lg"
                 key={chat._id}
               >
-                <Text w="100%" h="100%">
+                <Text w="100%">
                   {!chat.isGroupChat
                     ? getSender(loggedUser, chat.users)
                     : chat.chatName}
                 </Text>
+
+                {chat.latestMessage && (
+                  <p>
+                    <b>{chat.latestMessage.sender.name} :</b>{" "}
+                    {chat.latestMessage.content}
+                  </p>
+                )}
               </Box>
             ))}
           </Stack>

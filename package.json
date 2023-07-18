@@ -1,10 +1,10 @@
 {
   "name": "mern-chat-app",
   "version": "1.0.0",
-  "description": "this is real time chat application.",
-  "main": "index.js",
+  "description": "real time chat application using react, nodejs, expressjs, mongodb, socket.io",
+  "main": "./backend/server.js",
   "scripts": {
-    "start": "nodemon backend/server.js"
+    "start": "node backend/server.js"
   },
   "author": "Sudama Dhakad",
   "license": "ISC",

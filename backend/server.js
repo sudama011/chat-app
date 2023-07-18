@@ -36,8 +36,6 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  console.log("user connected");
-
   socket.on("setup", (userData) => {
     socket.join(userData._id);
     socket.emit("connected");
@@ -60,7 +58,6 @@ io.on("connection", (socket) => {
     });
   });
   socket.on("disconnect", () => {
-    console.log("user disconnected");
   });
 });
 
