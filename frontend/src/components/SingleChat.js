@@ -19,7 +19,7 @@ import "./miscellaneous/styles.css";
 import { io } from "socket.io-client";
 import Lottie from "react-lottie";
 import typingAnimation from "../animations/typing.json";
-const ENTPOINT = "http://localhost:5000";
+const ENTPOINT = "https://chat-app-api-1.vercel.app";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {

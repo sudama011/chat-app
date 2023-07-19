@@ -2,6 +2,7 @@ const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const connectDB = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
@@ -15,6 +16,7 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("api setup done");
@@ -31,7 +33,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
   },
 });
 
@@ -57,8 +59,7 @@ io.on("connection", (socket) => {
       socket.in(user._id).emit("message recieved", newMessageRecieved);
     });
   });
-  socket.on("disconnect", () => {
-  });
+  socket.on("disconnect", () => {});
 });
 
-httpServer.listen(PORT, console.log("listening on port: " + PORT));
+httpServer.listen(PORT);
