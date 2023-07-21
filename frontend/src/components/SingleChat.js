@@ -19,7 +19,7 @@ import "./miscellaneous/styles.css";
 import { io } from "socket.io-client";
 import Lottie from "react-lottie";
 import typingAnimation from "../animations/typing.json";
-const ENTPOINT = "https://chat-app-api-1.vercel.app";
+const ENTPOINT = "https://chat-app-api-ezua.onrender.com/";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -208,14 +208,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         )}
         <FormControl onKeyDown={sendMessage} isRequired mt={3}>
           {isTyping && (
-            
-              <Lottie
-                options={defaultOptions}
-                width={100}
-                height={30}
-                style={{ marginLeft: 10 }}
-              />
-           
+            <Lottie
+              options={defaultOptions}
+              width={100}
+              height={30}
+              style={{ marginLeft: 10 }}
+            />
           )}
 
           <Input
