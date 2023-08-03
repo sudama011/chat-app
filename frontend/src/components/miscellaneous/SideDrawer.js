@@ -135,7 +135,7 @@ const SideDrawer = () => {
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize="xl">Whatsapp clone</Text>
+        <Text fontSize="xl">Chat App</Text>
         <div>
           <Menu>
             <MenuButton p={1}>

@@ -37,7 +37,7 @@ const Homepage = () => {
           color="black"
           textAlign="center"
         >
-          Whatsapp clone
+          Chat App
         </Text>
       </Box>
 
